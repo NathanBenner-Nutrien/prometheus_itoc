@@ -1,0 +1,53 @@
+modules:
+  http_2xx:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip4"
+      tls_config:
+        insecure_skip_verify: true
+  illumio:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip4"
+      basic_auth:
+        username: "${illumio-username}"
+        password: "${illumio-password}"
+  abnormal_nutrien:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip4"
+      headers:
+        Authorization: 'Bearer ${abnormal-nutrien-token}'
+  abnormal_las:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip4"
+      headers:
+        Authorization: 'Bearer ${abnormal-las-token}'
+  abnormal_casa_do_adubo:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip4"
+      headers:
+        Authorization: 'Bearer ${abnormal-casa-do-adubo-token}'
+  imperva:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip4"
+      headers:
+        x-API-Id: '${imperva-id}'
+        x-API-Key: '${imperva-key}'
+  splunk:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip4"
+      headers:
+        Authorization: 'Bearer ${splunk-token}'
+  sailpoint:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip4"
+  cyberark:
+    prober: http
+    http:
+      preferred_ip_protocol: "ip4"

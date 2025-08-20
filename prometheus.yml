@@ -1,0 +1,179 @@
+# my global config
+global:
+  scrape_interval: 5m
+  evaluation_interval: 5m
+  # scrape_timeout is set to the global default (10s).
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["10.13.15.65:9090"]
+        labels:
+          app: prometheus
+        
+  - job_name: 'blackbox_exporter'
+    static_configs:
+      - targets: ['10.13.15.65:9115']
+        labels:
+          app: blackbox_exporter
+
+  - job_name: 'blackbox_illumio'
+    metrics_path: /probe
+    params:
+      module: [illumio]
+    static_configs:
+      - targets: ["https://scp1.illum.io/api/v2/health"]
+        labels:
+          app: illumio
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 10.13.15.65:9115
+
+  - job_name: 'blackbox_abnormal_nutrien'
+    metrics_path: /probe
+    scrape_interval: 10m
+    scrape_timeout: 4m
+    params:
+      module: [abnormal_nutrien]
+    static_configs:
+      - targets: ["https://api.abnormalplatform.com/v1/aggregations/dashboard_summary"]
+        labels:
+          app: abnormal
+          org: nutrien
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 10.13.15.65:9115
+
+  - job_name: 'blackbox_abnormal_las'
+    metrics_path: /probe
+    scrape_interval: 10m
+    scrape_timeout: 4m
+    params:
+      module: [abnormal_las]
+    static_configs:
+      - targets: ["https://api.abnormalplatform.com/v1/aggregations/dashboard_summary"]
+        labels:
+          app: abnormal
+          org: las
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 10.13.15.65:9115
+
+  - job_name: 'blackbox_abnormal_casa_do_adubo'
+    metrics_path: /probe
+    scrape_interval: 10m
+    scrape_timeout: 4m
+    params:
+      module: [abnormal_casa_do_adubo]
+    static_configs:
+      - targets: ["https://api.abnormalplatform.com/v1/aggregations/dashboard_summary"]
+        labels:
+          app: abnormal
+          org: casa_do_adubo
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 10.13.15.65:9115
+
+  - job_name: 'blackbox_imperva'
+    metrics_path: /probe
+    params:
+      module: [imperva]
+    static_configs:
+      - targets: ["https://api.imperva.com/policies/v2/policies"]
+        labels:
+          app: imperva
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 10.13.15.65:9115
+
+  - job_name: 'blackbox_splunk'
+    metrics_path: /probe
+    params:
+      module: [splunk]
+    static_configs:
+      - targets: ["https://nutrien.splunkcloud.com:8089/services/catalog/metricstore/metrics"]
+        labels:
+          app: splunk
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 10.13.15.65:9115
+
+  - job_name: 'blackbox_sailpoint'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets: ["https://identity.nutrien.com/identityiq/"]
+        labels:
+          app: sailpoint
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 10.13.15.65:9115
+
+  - job_name: 'blackbox_cyberark'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets: ["https://vault.nutrien.com/PasswordVault/v10/"]
+        labels:
+          app: cyberark
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 10.13.15.65:9115
+
+  - job_name: 'crowdstrike'
+    static_configs:
+      - targets: ["10.13.15.65:9234"]
+        labels:
+          app: crowdstrike
+
+  - job_name: 'meraki_exporter'
+    scrape_interval: 30m
+    scrape_timeout: 25m
+    static_configs:
+      - targets: ["10.13.15.65:9123"]
+        labels:
+          app: meraki
